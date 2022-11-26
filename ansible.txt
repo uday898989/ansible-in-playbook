@@ -1,0 +1,116 @@
+                  ANSIBLE-ADHOC COMMANDS & PLAYBOOK  
+
+# Create 2 instance in aws console 
+# 1st one is Master
+# and 2nd is Node its a (db server,WEB server,app server) 
+
+{ with help of ansible we can install webserver,jenkins,tomcat,jfrog and etc.... in very less
+time and its can create 100 servers at a time in it.when we configure its create more servers.
+
+so we have 3 misssions here 1 is our laptop and 2nd is master server it have public ip adress
+and 3rd one is node server its have public and private ip aderess but we take only private 
+ip adress.}
+
+# launch 2 instances at a same time in ec2 
+# go to our local machine (laptop) ( vs code)
+and create a folder and file $ touch "file name " inside the file 
+
+# SWITCH the instance whichh is master and connet it with any operating system like git bash
+putty,cmd,or terminal.
+
+1.switch as Sudo Su
+2. check the ansible version 
+
+3. vi install ansible.sh ( check here the path is on only main not in sudo su)
+
+4. Inside this copy the below commands and paste it (delete the hostname of the node1)
+
+
+**  #!/bin/bash
+
+# controler machine Setup New Hostname
+
+hostnamectl set-hostname "ansible-web.kesavkummari.com"
+
+# Node-1 setup new Hostname
+
+hostnamectl set-hostname "node1-web.kesavkummari.com"
+
+
+
+# Configure New Hostname as part of /etc/hosts file 
+
+echo "`hostname -I | awk '{ print $1}'` `hostname`" >> /etc/hosts
+
+
+
+# Update the Repository
+
+sudo apt update
+
+
+
+# Download, Install & Configure Ansible
+
+sudo apt install software-properties-common -y 
+
+
+# Add Ansible URL
+
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+
+
+# Install Ansible
+
+sudo apt install ansible -y 
+
+
+# To Restart SSM Agent on Ubuntu 
+
+sudo systemctl restart snap.amazon-ssm-agent.amazon-ssm-agent.service
+
+# Attach Instance profile To EC2 Instance 
+
+# aws ec2 associate-iam-instance-profile --iam-instance-profile Name=SA-EC2-SSM --instance-id ""   }
+
+
+
+
+5. $ bash -x install-ansible.sh ( its  a debug mode) go to node instance and launch it 
+
+6. check the ansible version
+7. ls -lrt /etc/ansible/hosts  (for elimentary file backup)
+8. cp -pvr /etc/ansible/hosts "/etc/ansible/hosts_$(date +%F_%R)"
+9. ls -lrt /etc/ansible/hosts*  ( to verify backup)
+10. vi /etc/ansible/hosts       ( delete the commented lines and add a group name "WEB")
+11. cat /etc/ansible/hosts      ( to read a file)
+12. GO TO node instance and copy the private ip "172.31.82.247" put it  ** vi /etc/ansible/hosts**
+13. switch as normal user to root user [su - ubuntu]
+14. take backup and verify
+15..ls -lrta
+16. ls -lrta .ssh/
+17.ls -lrta .ssh/authorixed_keys
+18. cat .ssh/authorixed_keys ( here we get pem key)
+13.ssh-keygen (here is creating key to connect node)
+14.ls -lrta .ssh/ ( to keys are created public and private so publick key share to nodes)
+15.cat .ssh/id_rsa.pub ( copy this key and paste in "node server"
+16. ssh and ip adress of node system,yes to agree,exit 
+
+                %% Connecting Node to another operating system %%
+
+
+** connect the Node Ec2 with another operating system**
+** 1. sudo su 
+2. cd 
+3.python3 --version  ( to check python version)
+
+4.# TO create node setuo new hostnamee
+5. hostnamectl set-hostname "node1-web.kesavkummari.com"
+6. echo "`hostname -I | awk '{ print $1}'` `hostname`" >> /etc/hosts
+7. su - ubuntu [switch as normal user Ubuntu]
+8.python3 --version
+9.ls -lrta
+10. ls -lrta .ssh/
+11.ls -lrta .ssh/authorixed_keys
+12. cat .ssh/authorixed_keys ( here we get pem key)
+13.vi .ssh/authorized_keys ( copy the key from master mission and copy here)
